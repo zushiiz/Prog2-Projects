@@ -1,4 +1,4 @@
-class pokemon:
+class Pokemon:
     def __init__(self, name, type, lvl, hp):
         self.name = name
         self.type = type
@@ -23,9 +23,9 @@ class pokemon:
         if self.hp > 0:
             print(f"{self.name} is alive!")
 
-pikachu = pokemon("Pikachu", "Electric", 5, 100)
+pikachu = Pokemon("Pikachu", "Electric", 5, 100)
 
-bulbasaur = pokemon("Bulbasaur", "Grass", 6, 100)
+bulbasaur = Pokemon("Bulbasaur", "Grass", 6, 100)
 
 pikachu.desc()
 bulbasaur.desc()

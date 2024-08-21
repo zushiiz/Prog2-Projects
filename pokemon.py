@@ -1,13 +1,4 @@
 import random
-
-def dmgcalc(atk):
-    crit = random.randint(1, 16)
-    if crit == 1:
-        dmg = atk * 2
-        return dmg
-    else:
-        dmg == atk
-        return dmg
         
 class pokemon():
     def __init__(self, name, type, lvl):
@@ -74,21 +65,19 @@ class pokemon():
 
     def attack(self, enemy):
         if self.spd > enemy.spd:
-            dmg = dmgcalc(self.atk)
-            enemy.hp -= dmg
-            dmg = dmgcalc(enemy.atk)
-            self.hp -= dmg
+            enemy.hp -= self.atk
+            self.hp = enemy.atk
+            print(f"{self.name} attacks {enemy.name} and did {self.atk} amount of damage!")
 
         else:
-            dmg = dmgcalc(enemy.atk)
-            self.hp -= dmg            
-            dmg = dmgcalc(self.atk)
-            enemy.hp -= dmg
+            self.hp = enemy.atk            
+            enemy.hp -= self.atk
 
-            
-        print(f"{self.name} attacks {enemy.name} and did {self.lvl} amount of damage!")
 
 charmander = pokemon("Charmander", "Fire", 1)
 bulbasaur = pokemon("Bulbasaur", "Grass", 1)
 
+bulbasaur.stat()
+charmander.trainspd()
 charmander.attack(bulbasaur)
+bulbasaur.stat()
