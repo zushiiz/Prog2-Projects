@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.List;
 
 public class BlackjackGame {
     public static void main(String[] args) {
@@ -6,7 +8,24 @@ public class BlackjackGame {
         Dice dice = new Dice();
 
         // Skapa spelare
-        Player player = new Player("Spelaren");
+        boolean playerJoin = true;
+        List<Player> playersList = new ArrayList<>();
+        int playerId = 1;
+
+        while (playerJoin) {
+            System.out.println("Ny spelare? (ja/nej)");
+            String input = scanner.nextLine();
+
+            if (input.equalsIgnoreCase("ja")) {
+                Player player = new Player("Spelare" + playerId);
+                playersList.add(player);
+                System.out.println("Lagt till " + player.name);
+                playerId++;
+            } else {
+                playerJoin = false;
+            }
+        }
+
         Player computer = new Player("Datorn");
 
         System.out.println("Välkommen till Blackjack med tärningar!");
@@ -14,25 +33,27 @@ public class BlackjackGame {
 
         // Huvudspel-loop
         while (true) {
-            // Spelarens tur
-            if (!player.isStanding()) {
-                System.out.println(player.getName() + ", din poäng är: " + player.getScore());
-                System.out.print("Vill du slå en tärning? (ja/nej): ");
-                String choice = scanner.nextLine();
 
-                if (choice.equalsIgnoreCase("ja")) {
-                    int roll = dice.roll();
-                    System.out.println("Du slog: " + roll);
-                    player.addScore(roll);
+            playersList.forEach(player -> {
+                if (!player.isStanding()) {
+                    System.out.println(player.getName() + ", din poäng är: " + player.getScore());
+                    System.out.print("Vill du slå en tärning? (ja/nej): ");
+                    String choice = scanner.nextLine();
 
-                    if (player.getScore() > 21) {
-                        System.out.println("Du har överstigit 21! Du förlorar.");
-                        return;
+                    if (choice.equalsIgnoreCase("ja")) {
+                        int roll = dice.roll();
+                        System.out.println("Du slog: " + roll);
+                        player.addScore(roll);
+
+                        if (player.getScore() > 21) {
+                            System.out.println("Du har överstigit 21! Du förlorar.");
+                            return;
+                        }
+                    } else {
+                        player.stand();
                     }
-                } else {
-                    player.stand();
                 }
-            }
+            });
 
             // Datorns tur
             if (!computer.isStanding()) {
@@ -53,17 +74,22 @@ public class BlackjackGame {
             }
 
             // Kontrollera om båda har stannat
-            if (player.isStanding() && computer.isStanding()) {
+            boolean allPlayersStanding = playersList.stream().allMatch(Player::isStanding);
+            if (allPlayersStanding && computer.isStanding()) {
                 System.out.println("\nBåda har stannat. Slutresultat:");
-                System.out.println(player.getName() + ": " + player.getScore());
+                playersList.forEach(player -> {
+                    System.out.println(player.getName() + ": " + player.getScore());
+                });
                 System.out.println(computer.getName() + ": " + computer.getScore());
 
-                if (player.getScore() > computer.getScore()) {
-                    System.out.println("Du vinner!");
-                } else if (player.getScore() < computer.getScore()) {
-                    System.out.println("Datorn vinner!");
-                } else {
-                    System.out.println("Det är oavgjort!");
+                for (Player player : playersList) {
+                    if (player.getScore() > computer.getScore()) {
+                        System.out.println(player.getName() + " vinner!");
+                    } else if (player.getScore() < computer.getScore()) {
+                        System.out.println("Datorn vinner!");
+                    } else {
+                        System.out.println("Det är oavgjort!");
+                    }
                 }
                 return;
             }
