@@ -17,7 +17,7 @@ public class BlackjackGame {
             String input = scanner.nextLine();
 
             if (input.equalsIgnoreCase("ja")) {
-                Player player = new Player("Spelare" + playerId);
+                Player player = new Player("Spelare[" + playerId +"]");
                 playersList.add(player);
                 System.out.println("Lagt till " + player.name);
                 playerId++;
